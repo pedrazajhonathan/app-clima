@@ -99,7 +99,7 @@
 
         async function obtenerfetch(entrada) {
             try {
-                let api = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${entrada}&appid=${api_key}`)
+                let api = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${entrada.value}&appid=${api_key}`)
                 if(!api.ok){
                     throw new Error("error al mandar el envio");
                 }
