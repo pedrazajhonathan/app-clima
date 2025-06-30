@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>app del clima</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: rgb(226, 226, 226);
+            display: flex;
+            justify-content: center;
+          
+        }
+        .padre{
+            padding: 25px;
+            background-color: rgb(8, 135, 209);
+           
+            border-radius: 10px;
+           
+            position: relative;
+            top: 50px;
+
+        }
+        h1{
+            text-align: center;
+            color: rgb(235, 238, 238);
+          
+            font-weight: 800;
+            text-transform: capitalize;
+        }
+        .hola{
+            position: relative;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+        #botom{
+            width: 60px;
+            height: 30px;
+            border-radius: 5px;
+            border-color: transparent;
+            background-color: rgba(27, 27, 92, 0.603);
+            font-size: .8em;
+            font-weight: 700;
+            box-shadow: 0 0 5px rgb(173, 153, 153);
+            color: aliceblue;
+            transition: all .3s linear;
+        }
+        #botom:hover{
+            transform: scale(1.1);
+        }
+        #botom:active{
+            transform: translateY(10px);
+        }
+        input{
+            outline: 0;
+            font-style: italic;
+            margin-bottom: 50px;
+            height: 25px;
+            border-radius: 4px;
+            border-color: transparent;
+            color: rgb(114, 108, 108);
+        }
+        .mensaje{
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="padre">
+            <h1>app del clima</h1>
+            <div class="hola">
+                <input type="text" name="ciudad" id="ciudad" placeholder="ciudad">
+                <button id="botom">enviar</button>
+            </div>
+            <div id="mensaje" class="mensaje"></div>
+        </div>
+    </header>
+    <script>
+        let api_key = "d1c0210dac225f61732b46f07237baaf"
+        let botom = document.getElementById("botom")
+        let resta = 273.15
+
+        botom.addEventListener("click" , () =>{
+            let entrada = document.getElementById("ciudad")
+            if(entrada.value){
+                obtenerfetch(entrada)
+            }
+        })
+
+        async function obtenerfetch(entrada) {
+            try {
+                let api = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${entrada}&appid=${api_key}`)
+                if(!api.ok){
+                    throw new Error("error al mandar el envio");
+                }
+                let api_lista = await api.json()
+
+                dato(api_lista)
+            } catch (error) {
+                console.error(error)
+            }
+        }
+
+        function dato(api_lista){
+
+            let nombreapi = api_lista.name
+            let nombreapais = api_lista.sys.country
+            let temp = api_lista.main.temp
+            let humedadapi = api_lista.main.humidity
+            let iconoapi = api_lista.weather[0].icon
+            
+            let nombre = document.createElement("h1")
+            nombre.textContent = `${nombreapi},${nombreapais}`
+            nombre.style.color = "#fff"
+
+            let temperatura = document.createElement("h2")
+            temperatura.textContent = `Temperatura ${Math.floor(temp-resta)}°C`
+            temperatura.style.color = "#fff"
+
+            let humedad = document.createElement("h2")
+            humedad.textContent = `la humedad es de ${humedadapi}%`
+            humedad.style.color = "#fff"
+
+            let icono = document.createElement("img")
+            icono.src = "https://openweathermap.org/img/wn/10d@2x.png"
+    
+            let padre = document.getElementById("mensaje")
+            padre.innerHTML = ""
+    
+            padre.appendChild(nombre)
+            padre.appendChild(temperatura)
+            padre.appendChild(icono)
+            padre.appendChild(humedad)
+
+        }
+        
+    </script>
+</body>
+</html>
