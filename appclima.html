@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>app del clima</title>
+    <title>App Del Clima</title>
     <style>
+        title{
+            text-transform: capitalize;
+        }
         body{
             margin: 0;
             padding: 0;
@@ -16,13 +19,12 @@
         }
         .padre{
             padding: 25px;
-            background-color: rgb(8, 135, 209);
-           
+            background-color: blue;
             border-radius: 10px;
-           
             position: relative;
             top: 50px;
-
+            gap: 0px;
+          
         }
         h1{
             text-align: center;
@@ -43,12 +45,17 @@
             height: 30px;
             border-radius: 5px;
             border-color: transparent;
-            background-color: rgba(27, 27, 92, 0.603);
+            background-color: rgba(4, 0, 253, 0.993);
             font-size: .8em;
-            font-weight: 700;
-            box-shadow: 0 0 5px rgb(173, 153, 153);
-            color: aliceblue;
+            font-weight: 600;
+            box-shadow: 0 0 6px #fdfdfd;
+            backdrop-filter: blur(20px);
+            color: rgb(248, 255, 255);
             transition: all .3s linear;
+            letter-spacing: 1px;
+            text-transform: capitalize;
+            
+            
         }
         #botom:hover{
             transform: scale(1.1);
@@ -71,21 +78,33 @@
             flex-direction: column;
             gap: 20px;
             align-items: center;
+            backdrop-filter: blur(20px);
+            bottom: 50px;
+        }
+        .errormensaje{
+            text-align: center;
+            font-size: 1.2em;
+            color: rgb(255, 255, 255);
+            font-weight: 700;
+            display: none;
         }
     </style>
 </head>
 <body>
     <header>
-        <div class="padre">
+        <div id="padre1" class="padre">
             <h1>app del clima</h1>
             <div class="hola">
                 <input type="text" name="ciudad" id="ciudad" placeholder="ciudad">
                 <button id="botom">enviar</button>
             </div>
-            <div id="mensaje" class="mensaje"></div>
+            <div id="mensaje" class="mensaje">
+                <p id="hola" class="errormensaje">por favor introdusca una ciudad o pais</p>
+            </div>
         </div>
     </header>
     <script>
+
         let api_key = "d1c0210dac225f61732b46f07237baaf"
         let botom = document.getElementById("botom")
         let resta = 273.15
@@ -94,8 +113,33 @@
             let entrada = document.getElementById("ciudad")
             if(entrada.value){
                 obtenerfetch(entrada)
+                function obtenerfecha(){
+                    let fecha = new Date()
+                    let dias = ["lunes","martes","miercoles","jueves","viernes","sabado","domingo"]
+                    let totalFecha = `hoy ${dias[fecha.getDay()]}`
+                    let padre = document.querySelector(".mensaje")
+                    let fechanombre = document.createElement("p")
+                    fechanombre.textContent = totalFecha
+                    fechanombre.style.color = "#fff" 
+                    fechanombre.style.fontSize = "1.5em"
+                    fechanombre.style.textTransform = "capitalize"
+                    padre.innerHTML = ""
+                    padre.appendChild(fechanombre)
+                }
+                obtenerfecha()
+                let padre12 = document.getElementById("padre1")
+                padre12.style.backgroundColor = "blue"
+            }else{
+                function error(){
+                    let errormensaje = document.getElementById("hola")
+                    let padre12 = document.getElementById("padre1")
+                    errormensaje.style.display = "block"
+                    padre12.style.backgroundColor = "red"
+                }
+                error()
             }
         })
+
 
         async function obtenerfetch(entrada) {
             try {
@@ -132,7 +176,7 @@
             humedad.style.color = "#fff"
 
             let icono = document.createElement("img")
-            icono.src = "https://openweathermap.org/img/wn/10d@2x.png"
+            icono.src = `https://openweathermap.org/img/wn/${icono}@2x.png`
     
             let padre = document.getElementById("mensaje")
             padre.innerHTML = ""
