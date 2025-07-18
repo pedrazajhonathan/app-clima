@@ -107,7 +107,7 @@
             padre.innerHTML  = ""
 
             let totalnombre = `${api_lista.name},${api_lista.sys.country}`
-            let temperaturatotal = `la temperatura es de : ${Math.floor(api_lista.mail.temp - restaTemperatura)}`
+            let temperaturatotal = `la temperatura es de : ${Math.floor(api_lista.main.temp - restaTemperatura)}`
             let humedadtotal = `la humedad es de:${api_lista.main.humidity}%`
             let iconototal = `https://openweathermap.org/img/wn/${api_lista.weather[0].icon}@2x.png`
 
