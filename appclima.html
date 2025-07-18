@@ -1,193 +1,128 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App Del Clima</title>
+    <title>Document</title>
     <style>
-        title{
-            text-transform: capitalize;
-        }
         body{
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            background-color: rgb(226, 226, 226);
+            background-color: rgb(255, 255, 255);
+        }
+        header{
             display: flex;
             justify-content: center;
-          
         }
         .padre{
             padding: 25px;
-            background-color: blue;
             border-radius: 10px;
-            position: relative;
-            top: 50px;
-            gap: 0px;
-          
+            background-color: rgb(13, 185, 177);
+            transition: all .3s linear;
         }
-        h1{
+        .padre h1{
             text-align: center;
-            color: rgb(235, 238, 238);
-          
-            font-weight: 800;
+            color: aliceblue;
             text-transform: capitalize;
         }
-        .hola{
+        .padreentrada input{
+            outline: 0;
+            color: black;
+            font-style: italic;
+            padding: 5px;
+       
+            border-color: transparent;
+        }
+        .padreentrada button{
+            padding: 5px;
+            border-color: transparent;
+            margin-left: 10px;
+        
+            color: rgb(0, 0, 0);
+            transition: all .3s linear;
+        }
+        
+        .datos{
             position: relative;
             display: flex;
             justify-content: center;
-            gap: 10px;
-            width: 100%;
+            gap: 0px;
+            align-items: center;
         }
-        #botom{
-            width: 60px;
-            height: 30px;
-            border-radius: 5px;
-            border-color: transparent;
-            background-color: rgba(4, 0, 253, 0.993);
-            font-size: .8em;
-            font-weight: 600;
-            box-shadow: 0 0 6px #fdfdfd;
-            backdrop-filter: blur(20px);
-            color: rgb(248, 255, 255);
-            transition: all .3s linear;
-            letter-spacing: 1px;
-            text-transform: capitalize;
-            
-            
+        .hijo h1,p{
+            text-align: center;
+            color: aliceblue;
+            scale: 1.2;
         }
-        #botom:hover{
-            transform: scale(1.1);
-        }
-        #botom:active{
-            transform: translateY(10px);
-        }
-        input{
-            outline: 0;
-            font-style: italic;
-            margin-bottom: 50px;
-            height: 25px;
-            border-radius: 4px;
-            border-color: transparent;
-            color: rgb(114, 108, 108);
-        }
-        .mensaje{
-            position: relative;
+     
+        .hijo{
             display: flex;
             flex-direction: column;
-            gap: 20px;
             align-items: center;
-            backdrop-filter: blur(20px);
-            bottom: 50px;
+            justify-content: center;
         }
-        .errormensaje{
-            text-align: center;
-            font-size: 1.2em;
-            color: rgb(255, 255, 255);
-            font-weight: 700;
-            display: none;
+        .hijo img{
+            width: 80px;
         }
+
+
     </style>
 </head>
 <body>
     <header>
-        <div id="padre1" class="padre">
-            <h1>app del clima</h1>
-            <div class="hola">
-                <input type="text" name="ciudad" id="ciudad" placeholder="ciudad">
-                <button id="botom">enviar</button>
+        <div class="padre">
+            <h1>consulta el clima</h1>
+            <div class="padreentrada">
+                <input type="text" name="ciudad" id="ciudad" placeholder="ciudad o pais">
+                <button onclick="buscar()">buscar</button>
             </div>
-            <div id="mensaje" class="mensaje">
-                <p id="hola" class="errormensaje">por favor introdusca una ciudad o pais</p>
-            </div>
+            <div id="dato" class="datos"></div>
         </div>
     </header>
     <script>
-
+        let restaTemperatura = 273.15
         let api_key = "d1c0210dac225f61732b46f07237baaf"
-        let botom = document.getElementById("botom")
-        let resta = 273.15
 
-        botom.addEventListener("click" , () =>{
-            let entrada = document.getElementById("ciudad")
-            if(entrada.value){
-                obtenerfetch(entrada)
-                function obtenerfecha(){
-                    let fecha = new Date()
-                    let dias = ["lunes","martes","miercoles","jueves","viernes","sabado","domingo"]
-                    let totalFecha = `hoy ${dias[fecha.getDay()]}`
-                    let padre = document.querySelector(".mensaje")
-                    let fechanombre = document.createElement("p")
-                    fechanombre.textContent = totalFecha
-                    fechanombre.style.color = "#fff" 
-                    fechanombre.style.fontSize = "1.5em"
-                    fechanombre.style.textTransform = "capitalize"
-                    padre.innerHTML = ""
-                    padre.appendChild(fechanombre)
-                }
-                obtenerfecha()
-                let padre12 = document.getElementById("padre1")
-                padre12.style.backgroundColor = "blue"
-            }else{
-                function error(){
-                    let errormensaje = document.getElementById("hola")
-                    let padre12 = document.getElementById("padre1")
-                    errormensaje.style.display = "block"
-                    padre12.style.backgroundColor = "red"
-                }
-                error()
+        function buscar(){
+            let entradaciudad = document.getElementById("ciudad")
+            if(entradaciudad.value){
+                obtenerapi(entradaciudad)
             }
-        })
-
-
-        async function obtenerfetch(entrada) {
+        }
+        async function obtenerapi(entradaciudad){
             try {
-                let api = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${entrada.value}&appid=${api_key}`)
-                if(!api.ok){
-                    throw new Error("error al mandar el envio");
-                }
-                let api_lista = await api.json()
-
-                dato(api_lista)
+              let  api = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${entradaciudad.value}&appid=${api_key}`)  
+              if(!api.ok){
+                throw new Error("error al mandar el envio");
+              }
+              let api_lista = await api.json()
+              dato_api(api_lista)
             } catch (error) {
-                console.error(error)
+                console.log(error)
             }
+
         }
 
-        function dato(api_lista){
+        function dato_api(api_lista){
 
-            let nombreapi = api_lista.name
-            let nombreapais = api_lista.sys.country
-            let temp = api_lista.main.temp
-            let humedadapi = api_lista.main.humidity
-            let iconoapi = api_lista.weather[0].icon
+            let padre = document.getElementById("dato")
+            padre.innerHTML  = ""
+
+            let totalnombre = `${api_lista.name},${api_lista.sys.country}`
+            let temperaturatotal = `la temperatura es de : ${Math.floor(api_lista.mail.temp - restaTemperatura)}`
+            let humedadtotal = `la humedad es de:${api_lista.main.humidity}%`
+            let iconototal = `https://openweathermap.org/img/wn/${api_lista.weather[0].icon}@2x.png`
+
+            let padre1 = document.createElement("div")
+            padre1.classList.add("hijo")
+            padre1.innerHTML = `
+                <h1>${totalnombre}</h1>
+                <h2>${temperaturatotal}</h2>
+                <img src="${iconototal}">
+                <h2>${humedadtotal}</h2>
+            `
+            padre.appendChild(padre1)
             
-            let nombre = document.createElement("h1")
-            nombre.textContent = `${nombreapi},${nombreapais}`
-            nombre.style.color = "#fff"
-
-            let temperatura = document.createElement("h2")
-            temperatura.textContent = `Temperatura ${Math.floor(temp-resta)}°C`
-            temperatura.style.color = "#fff"
-
-            let humedad = document.createElement("h2")
-            humedad.textContent = `la humedad es de ${humedadapi}%`
-            humedad.style.color = "#fff"
-
-            let icono = document.createElement("img")
-            icono.src = `https://openweathermap.org/img/wn/${iconoapi}@2x.png`
-    
-            let padre = document.getElementById("mensaje")
-            padre.innerHTML = ""
-    
-            padre.appendChild(nombre)
-            padre.appendChild(temperatura)
-            padre.appendChild(icono)
-            padre.appendChild(humedad)
 
         }
-        
     </script>
 </body>
 </html>
