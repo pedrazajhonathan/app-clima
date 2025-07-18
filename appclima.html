@@ -15,12 +15,12 @@
         .padre{
             padding: 25px;
             border-radius: 10px;
-            background-color: rgb(13, 185, 177);
+            background-color: rgb(177, 158, 118);
             transition: all .3s linear;
         }
         .padre h1{
             text-align: center;
-            color: aliceblue;
+     
             text-transform: capitalize;
         }
         .padreentrada input{
@@ -47,20 +47,17 @@
             gap: 0px;
             align-items: center;
         }
-        .hijo h1,p{
-            text-align: center;
-            color: aliceblue;
-            scale: 1.2;
-        }
+        
      
         .hijo{
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            gap: -30px;
         }
         .hijo img{
-            width: 80px;
+            width: 100px;
         }
 
 
@@ -85,6 +82,8 @@
             let entradaciudad = document.getElementById("ciudad")
             if(entradaciudad.value){
                 obtenerapi(entradaciudad)
+                let padre = document.getElementById("dato")
+                padre.innerHTML = ""
             }
         }
         async function obtenerapi(entradaciudad){
@@ -104,7 +103,7 @@
         function dato_api(api_lista){
 
             let padre = document.getElementById("dato")
-            padre.innerHTML  = ""
+          
 
             let totalnombre = `${api_lista.name},${api_lista.sys.country}`
             let temperaturatotal = `la temperatura es de : ${Math.floor(api_lista.main.temp - restaTemperatura)}`
@@ -115,7 +114,7 @@
             padre1.classList.add("hijo")
             padre1.innerHTML = `
                 <h1>${totalnombre}</h1>
-                <h2>${temperaturatotal}</h2>
+                <h2>${temperaturatotal}°C</h2>
                 <img src="${iconototal}">
                 <h2>${humedadtotal}</h2>
             `
