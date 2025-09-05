@@ -22,6 +22,7 @@
             text-align: center;
             font-family: monospace;
             text-transform: capitalize;
+            color: aliceblue;
         }
         .padreentrada input{
             outline: 0;
@@ -43,20 +44,28 @@
             justify-content: center;
             gap: 0px;
             align-items: center;
+            flex-direction: column;
         }
-        .hijo{
+        .datos{
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             gap: -30px;
         }
-        .hijo img{
+        .datos h1{
+            font-size: 2.1em;
+            color: aliceblue;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .datos img{
             width: 100px;
         }
-        .hijo p{
+        .datos p{
             font-size: 1em;
             font-weight: 100;
+            color: aliceblue;
+            font-family: 'Courier New', Courier, monospace;
         }
     </style>
 </head>
@@ -76,49 +85,47 @@
         let api_key = "d1c0210dac225f61732b46f07237baaf"
 
         function buscar(){
-            let entradaciudad = document.getElementById("ciudad")
-            if(entradaciudad.value){
-                obtenerapi(entradaciudad)
-                let padre = document.getElementById("dato")
-                padre.innerHTML = ""
+            let ciudad = document.getElementById("ciudad")
+            if(ciudad.value.length > 3){
+                llamarapi(ciudad)
             }
         }
-        async function obtenerapi(entradaciudad){
+
+        async function llamarapi(ciudad) {
             try {
-              let  api = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${entradaciudad.value}&appid=${api_key}`)  
-              if(!api.ok){
-                throw new Error("error al mandar el envio");
-              }
-              let api_lista = await api.json()
-              dato_api(api_lista)
+                let api = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${ciudad.value}&appid=${api_key}`)    
+                if(!api.ok){
+                    throw new Error("algo anda mal con el sevidor");
+                }
+                let api_lista = await api.json()
+
+                dato(api_lista)
+
             } catch (error) {
                 console.log(error)
-            }
-
+            }        
         }
 
-        function dato_api(api_lista){
+        function dato(api_lista){
+            console.log(api_lista)
 
             let padre = document.getElementById("dato")
-          
+            padre.innerHTML = ""
 
-            let totalnombre = `${api_lista.name},${api_lista.sys.country}`
-            let temperaturatotal = `la temperatura es de : ${Math.floor(api_lista.main.temp - restaTemperatura)}`
-            let humedadtotal = `la humedad es de:${api_lista.main.humidity}%`
-            let iconototal = `https://openweathermap.org/img/wn/${api_lista.weather[0].icon}@2x.png`
+            let nombre = api_lista.name
+            let pais = api_lista.sys.country
+            let icono = api_lista.weather[0].icon
+            let temperatura = api_lista.main.temp
+            let humedad = api_lista.main.humidity
 
-            let padre1 = document.createElement("div")
-            padre1.classList.add("hijo")
-            padre1.innerHTML = `
-                <h1>${totalnombre}</h1>
-                <h2>${temperaturatotal}°C</h2>
-                <img src="${iconototal}">
-                <h2>${humedadtotal}</h2>
+            padre.innerHTML = `
+            <h1>${nombre},${pais}</h1>
+            <img src=https://openweathermap.org/img/wn/${icono}@2x.png> 
+            <p>temperatura ${Math.trunc(temperatura - restaTemperatura)}°</p>
+            <p>humedad ${humedad}%</p>
             `
-            padre.appendChild(padre1)
-            
-
         }
+
     </script>
 </body>
 </html>
