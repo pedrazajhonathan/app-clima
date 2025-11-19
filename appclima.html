@@ -1,124 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>consulta el clima </title>
-    <style>
-        body{
-            background-color: rgb(0, 217, 255);
-        }
-        header{
-            display: flex;
-            justify-content: center;
-        }
-        .padre{
-            padding: 25px;
-            border-radius: 10px;
-            background-color: rgb(33, 109, 110);
-            transition: all .3s linear;
-        }
-        .padre h1{
-            text-align: center;
-     
-            text-transform: capitalize;
-        }
-        .padreentrada input{
-            outline: 0;
-            color: black;
-            font-style: italic;
-            padding: 5px;
-            border-color: transparent;
-        }
-        .padreentrada button{
-            padding: 5px;
-            border-color: transparent;
-            margin-left: 10px;
-            color: rgb(0, 0, 0);
-            transition: all .3s linear;
-        }
-        .datos{
-            position: relative;
-            display: flex;
-            justify-content: center;
-            gap: 0px;
-            align-items: center;
-        }
-        .hijo{
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: -30px;
-        }
-        .hijo img{
-            width: 100px;
-        }
-        .hijo p{
-            font-size: 1em;
-            font-weight: 100;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>App del Clima</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <script src="script.js" defer></script>
 </head>
 <body>
-    <header>
-        <div class="padre">
-            <h1>consulta el clima</h1>
-            <div class="padreentrada">
-                <input type="text" name="ciudad" id="ciudad" placeholder="ciudad o pais">
-                <button onclick="buscar()">buscar</button>
-            </div>
-            <div id="dato" class="datos"></div>
-        </div>
-    </header>
-    <script>
-        let restaTemperatura = 273.15
-        let api_key = "d1c0210dac225f61732b46f07237baaf"
-
-        function buscar(){
-            let entradaciudad = document.getElementById("ciudad")
-            if(entradaciudad.value){
-                obtenerapi(entradaciudad)
-                let padre = document.getElementById("dato")
-                padre.innerHTML = ""
-            }
-        }
-        async function obtenerapi(entradaciudad){
-            try {
-              let  api = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${entradaciudad.value}&appid=${api_key}`)  
-              if(!api.ok){
-                throw new Error("error al mandar el envio");
-              }
-              let api_lista = await api.json()
-              dato_api(api_lista)
-            } catch (error) {
-                console.log(error)
-            }
-
-        }
-
-        function dato_api(api_lista){
-
-            let padre = document.getElementById("dato")
-          
-
-            let totalnombre = `${api_lista.name},${api_lista.sys.country}`
-            let temperaturatotal = `la temperatura es de : ${Math.floor(api_lista.main.temp - restaTemperatura)}`
-            let humedadtotal = `la humedad es de:${api_lista.main.humidity}%`
-            let iconototal = `https://openweathermap.org/img/wn/${api_lista.weather[0].icon}@2x.png`
-
-            let padre1 = document.createElement("div")
-            padre1.classList.add("hijo")
-            padre1.innerHTML = `
-                <h1>${totalnombre}</h1>
-                <h2>${temperaturatotal}°C</h2>
-                <img src="${iconototal}">
-                <h2>${humedadtotal}</h2>
-            `
-            padre.appendChild(padre1)
-            
-
-        }
-    </script>
+  <div class="weather-card">
+    <div class="city-input">
+      <input type="text" placeholder="Escribe una ciudad..." id="ciudad" />
+      <button onclick="mostrar()">Buscar</button>
+    </div>
+    <div class="weather-header">
+      <h1 id="pais"></h1>
+      <p id="fecha">Miércoles, 19 Nov</p>
+    </div>
+    <div class="weather-info">
+      <img id="imagen" src="https://cdn-icons-png.flaticon.com/512/1163/1163661.png" alt="Soleado" class="weather-icon" />
+      <h2 id="temperatura">28°C</h2>
+ 
+    </div>
+    <div class="weather-footer">
+      <div id="padre">
+        <p id="temperatura-maxima">🌡️ Máx: 30°C</p>
+        <p id="temperatura-minima">❄️ Mín: 22°C</p>
+        <p id="humedad">💧 Humedad: 60%</p>
+      </div>
+   
+    </div>
+  </div>
 </body>
 </html>
