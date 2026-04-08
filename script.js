@@ -32,7 +32,9 @@ function informacion(api_lista){
     let tiempo = new Date()
     let dias = ['lunes','martes','miercoles','jueves','viernes','sabado','dominguo']
     let meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre']
+
     let tiempo_total = `${dias[tiempo.getDay()]}, ${tiempo.getDate()} de ${meses[tiempo.getMonth()]}`
+    
     let temperatura_info = `${Math.floor(api_lista.main.temp - resta)}°C`
     let direccion_img = `https://openweathermap.org/img/wn/${api_lista.weather[0].icon}@2x.png`
     let temperatura_maxima_info = `Max:${Math.floor(api_lista.main.temp_max - resta)}°C`
